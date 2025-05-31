@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import dev.jdtech.jellyfin.settings.domain.models.Preference
 import timber.log.Timber
 import javax.inject.Inject
+import androidx.core.content.edit
 
 class AppPreferences
 @Inject
@@ -18,19 +19,19 @@ constructor(
     val preferredSubtitleLanguage = Preference<String?>("pref_subtitle_language", null)
 
     // Interface
-    val theme = Preference("pref_theme", "system")
+    val theme = Preference("pref_theme", "dark")
     val dynamicColors = Preference("pref_dynamic_colors", true)
-    val homeSuggestions = Preference<Boolean>("home_suggestions", true)
-    val homeContinueWatching = Preference<Boolean>("home_continue_watching", true)
-    val homeNextUp = Preference<Boolean>("home_next_up", true)
-    val homeLatest = Preference<Boolean>("home_latest", true)
+    val homeSuggestions = Preference("home_suggestions", true)
+    val homeContinueWatching = Preference("home_continue_watching", true)
+    val homeNextUp = Preference("home_next_up", true)
+    val homeLatest = Preference("home_latest", true)
     val displayExtraInfo = Preference("pref_display_extra_info", false)
 
     // Player
     val playerBrightness = Preference("pref_player_brightness", -1.0f)
 
     // Player - mpv
-    val playerMpv = Preference("pref_player_mpv", true)
+    val playerMpv = Preference("pref_player_mpv", false)
     val playerMpvHwdec = Preference("pref_player_mpv_hwdec", "mediacodec")
     val playerMpvVo = Preference("pref_player_mpv_vo", "gpu")
     val playerMpvAo = Preference("pref_player_mpv_ao", "audiotrack")
@@ -41,7 +42,7 @@ constructor(
     val playerGesturesZoom = Preference("pref_player_gestures_zoom", true)
     val playerGesturesSeek = Preference("pref_player_gestures_seek", true)
     val playerGesturesSeekTrickplay = Preference("pref_player_gestures_seek_trickplay", true)
-    val playerGesturesChapterSkip = Preference("pref_player_gestures_chapter_skip", true)
+    val playerGesturesChapterSkip = Preference("pref_player_gestures_chapter_skip", false)
     val playerGesturesBrightnessRemember = Preference("pref_player_brightness_remember", false)
     val playerGesturesStartMaximized = Preference("pref_player_start_maximized", false)
 
@@ -55,7 +56,7 @@ constructor(
     val playerTrickplay = Preference("pref_player_trickplay", true)
 
     // Player - PiP
-    val playerPipGesture = Preference("pref_player_picture_in_picture_gesture", false)
+    val playerPipGesture = Preference("pref_player_picture_in_picture_gesture", true)
 
     // Downloads
     val downloadOverMobileData = Preference("pref_downloads_mobile_data", false)
@@ -68,13 +69,13 @@ constructor(
 
     // Cache
     val imageCache = Preference("pref_image_cache", true)
-    val imageCacheSize = Preference("pref_image_cache_size", 20)
+    val imageCacheSize = Preference("pref_image_cache_size", 50)
 
     // Sorting
     val sortBy = Preference("pref_sort_by", "SortName")
     val sortOrder = Preference("pref_sort_order", "Ascending")
 
-    // Ofline mode
+    // Offline mode
     val offlineMode = Preference("pref_offline_mode", false)
 
     inline fun <reified T> getValue(preference: Preference<T>): T {
@@ -95,15 +96,15 @@ constructor(
     }
 
     inline fun <reified T> setValue(preference: Preference<T>, value: T) {
-        val editor = sharedPreferences.edit()
-        when (preference.defaultValue) {
-            is Boolean -> editor.putBoolean(preference.backendName, value as Boolean)
-            is Int -> editor.putInt(preference.backendName, value as Int)
-            is Long -> editor.putLong(preference.backendName, value as Long)
-            is Float -> editor.putFloat(preference.backendName, value as Float)
-            is String? -> editor.putString(preference.backendName, value as String?)
-            else -> throw Exception()
+        sharedPreferences.edit {
+            when (preference.defaultValue) {
+                is Boolean -> putBoolean(preference.backendName, value as Boolean)
+                is Int -> putInt(preference.backendName, value as Int)
+                is Long -> putLong(preference.backendName, value as Long)
+                is Float -> putFloat(preference.backendName, value as Float)
+                is String? -> putString(preference.backendName, value as String?)
+                else -> throw Exception()
+            }
         }
-        editor.apply()
     }
 }

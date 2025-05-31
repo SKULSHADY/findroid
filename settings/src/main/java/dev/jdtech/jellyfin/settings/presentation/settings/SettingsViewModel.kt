@@ -40,7 +40,6 @@ constructor(
             preferences = listOf(
                 PreferenceSwitch(
                     nameStringResource = R.string.offline_mode,
-                    descriptionStringRes = R.string.offline_mode_summary,
                     iconDrawableId = R.drawable.ic_server_off,
                     enabled = false,
                     backendPreference = appPreferences.offlineMode,
@@ -111,7 +110,7 @@ constructor(
                                     backendPreference = appPreferences.theme,
                                     onUpdate = { value ->
                                         viewModelScope.launch {
-                                            eventsChannel.send(SettingsEvent.UpdateTheme(value ?: "system"))
+                                            eventsChannel.send(SettingsEvent.UpdateTheme(value ?: "dark"))
                                         }
                                     },
                                     options = R.array.theme,
