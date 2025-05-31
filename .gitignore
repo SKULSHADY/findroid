@@ -1,6 +1,8 @@
 # Gradle files
 .gradle/
 build/
+app/phone/libre/
+app/tv/libre/
 
 # Local configuration file (sdk path, etc)
 local.properties
