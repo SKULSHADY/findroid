@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,9 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.jdtech.jellyfin.models.User
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderButton
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderText
 import dev.jdtech.jellyfin.presentation.setup.components.RootLayout
 import dev.jdtech.jellyfin.presentation.setup.components.UserItem
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
+import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.setup.presentation.users.UsersAction
 import dev.jdtech.jellyfin.setup.presentation.users.UsersEvent
 import dev.jdtech.jellyfin.setup.presentation.users.UsersState
@@ -96,7 +102,7 @@ private fun UsersScreenLayout(
     RootLayout {
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = MaterialTheme.spacings.default)
                 .widthIn(max = 480.dp)
                 .fillMaxWidth()
                 .align(Alignment.Center),
@@ -109,25 +115,23 @@ private fun UsersScreenLayout(
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(SetupR.string.users),
-                style = MaterialTheme.typography.headlineMedium,
+            HeaderText(
+                stringResource(
+                    SetupR.string.server_subtitle,
+                    state.serverName ?: SetupR.string.users
+                )
             )
-            Text(
-                text = stringResource(SetupR.string.server_subtitle, state.serverName ?: ""),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
             if (state.users.isEmpty() && state.publicUsers.isEmpty()) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacings.extraLarge))
                 Text(
                     text = stringResource(SetupR.string.users_no_users),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(modifier = Modifier.weight(1f))
             } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                LazyColumn (
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.medium),
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -135,7 +139,6 @@ private fun UsersScreenLayout(
                     items(state.users) { user ->
                         UserItem(
                             name = user.name,
-                            modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 onAction(UsersAction.OnUserClick(userId = user.id))
                             },
@@ -149,7 +152,6 @@ private fun UsersScreenLayout(
                         UserItem(
                             name = user.name,
                             modifier = Modifier
-                                .fillMaxWidth()
                                 .alpha(0.7f),
                             onClick = {
                                 onAction(UsersAction.OnPublicUserClick(username = user.name))
@@ -161,21 +163,17 @@ private fun UsersScreenLayout(
             }
         }
         if (showBack) {
-            IconButton(
-                onClick = { onAction(UsersAction.OnBackClick) },
-                modifier = Modifier.padding(start = 8.dp),
-            ) {
-                Icon(painter = painterResource(CoreR.drawable.ic_arrow_left), contentDescription = null)
-            }
+            HeaderButton(
+                painter = painterResource(CoreR.drawable.ic_arrow_left),
+                onAction = { onAction(UsersAction.OnBackClick) }
+            )
         }
-        IconButton(
-            onClick = { onAction(UsersAction.OnChangeServerClick) },
+        HeaderButton(
+            painter = painterResource(CoreR.drawable.ic_server),
+            onAction = { onAction(UsersAction.OnChangeServerClick) },
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(end = 8.dp),
-        ) {
-            Icon(painter = painterResource(CoreR.drawable.ic_server), contentDescription = null)
-        }
+                .align(Alignment.TopEnd),
+        )
         ExtendedFloatingActionButton(
             onClick = { onAction(UsersAction.OnAddClick) },
             icon = { Icon(painterResource(CoreR.drawable.ic_plus), contentDescription = null) },
@@ -191,7 +189,12 @@ private fun UsersScreenLayout(
                     Text(text = stringResource(SetupR.string.remove_user_dialog))
                 },
                 text = {
-                    Text(text = stringResource(SetupR.string.remove_user_dialog_text, selectedUser!!.name))
+                    Text(
+                        text = stringResource(
+                            SetupR.string.remove_user_dialog_text,
+                            selectedUser!!.name
+                        )
+                    )
                 },
                 onDismissRequest = {
                     openDeleteDialog = false

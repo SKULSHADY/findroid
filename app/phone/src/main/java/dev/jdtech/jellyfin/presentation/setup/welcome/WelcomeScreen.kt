@@ -20,11 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import dev.jdtech.jellyfin.presentation.setup.components.RootLayout
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
+import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.setup.presentation.welcome.WelcomeAction
 import dev.jdtech.jellyfin.core.R as CoreR
 import dev.jdtech.jellyfin.setup.R as SetupR
@@ -52,7 +54,7 @@ private fun WelcomeScreenLayout(
     onAction: (WelcomeAction) -> Unit,
 ) {
     RootLayout(
-        padding = PaddingValues(horizontal = 24.dp),
+        padding = PaddingValues(horizontal = MaterialTheme.spacings.default),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,33 +67,45 @@ private fun WelcomeScreenLayout(
                 contentDescription = null,
                 modifier = Modifier.width(250.dp),
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacings.extraLarge))
             Text(
                 text = stringResource(SetupR.string.welcome),
                 style = MaterialTheme.typography.headlineSmall,
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacings.medium))
             Text(
                 text = stringResource(SetupR.string.welcome_text),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacings.extraLarge))
             Column(
                 modifier = Modifier.widthIn(max = 480.dp),
             ) {
                 OutlinedButton(
                     onClick = { onAction(WelcomeAction.OnLearnMoreClick) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
                 ) {
-                    Text(text = stringResource(SetupR.string.welcome_btn_learn_more))
+                    Text(
+                        text = stringResource(SetupR.string.welcome_btn_learn_more),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium,
+                    )
                 }
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.spacings.small))
                 Button(
                     onClick = { onAction(WelcomeAction.OnContinueClick) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
                 ) {
-                    Text(text = stringResource(SetupR.string.welcome_btn_continue))
+                    Text(
+                        text = stringResource(SetupR.string.welcome_btn_continue),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Medium,
+                    )
                 }
             }
         }

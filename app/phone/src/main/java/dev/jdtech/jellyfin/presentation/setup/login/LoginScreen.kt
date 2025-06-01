@@ -3,7 +3,6 @@ package dev.jdtech.jellyfin.presentation.setup.login
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -46,9 +46,12 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderButton
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderText
 import dev.jdtech.jellyfin.presentation.setup.components.LoadingButton
 import dev.jdtech.jellyfin.presentation.setup.components.RootLayout
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
+import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.setup.presentation.login.LoginAction
 import dev.jdtech.jellyfin.setup.presentation.login.LoginEvent
 import dev.jdtech.jellyfin.setup.presentation.login.LoginState
@@ -117,7 +120,7 @@ private fun LoginScreenLayout(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = MaterialTheme.spacings.default)
                 .widthIn(max = 480.dp)
                 .align(Alignment.Center)
                 .verticalScroll(scrollState),
@@ -129,17 +132,12 @@ private fun LoginScreenLayout(
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(SetupR.string.login),
-                style = MaterialTheme.typography.headlineMedium,
+            HeaderText(
+                stringResource(
+                    SetupR.string.server_subtitle,
+                    state.serverName ?: SetupR.string.login
+                )
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(SetupR.string.server_subtitle, state.serverName ?: ""),
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = username,
                 leadingIcon = {
@@ -162,6 +160,7 @@ private fun LoginScreenLayout(
                 isError = state.error != null,
                 enabled = !state.isLoading,
                 modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -177,7 +176,9 @@ private fun LoginScreenLayout(
                         onClick = { passwordVisible = !passwordVisible },
                     ) {
                         Icon(
-                            painter = if (passwordVisible) painterResource(CoreR.drawable.ic_eye_off) else painterResource(CoreR.drawable.ic_eye),
+                            painter = if (passwordVisible) painterResource(CoreR.drawable.ic_eye_off) else painterResource(
+                                CoreR.drawable.ic_eye
+                            ),
                             contentDescription = null,
                         )
                     }
@@ -209,66 +210,78 @@ private fun LoginScreenLayout(
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.large,
             )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacings.medium))
             LoadingButton(
                 text = stringResource(SetupR.string.login_btn_login),
                 onClick = { doLogin() },
                 isLoading = state.isLoading,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
             )
             AnimatedVisibility(state.quickConnectEnabled) {
                 Column {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacings.medium))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 12.dp))
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 12.dp)
+                        )
                         Text(
                             text = stringResource(SetupR.string.or),
                             color = DividerDefaults.color,
                             style = MaterialTheme.typography.bodySmall,
                         )
-                        HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 12.dp))
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 12.dp)
+                        )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Box {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacings.medium))
+                    OutlinedButton(
+                        onClick = { onAction(LoginAction.OnQuickConnectClick) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                    ) {
                         if (state.quickConnectCode != null) {
                             CircularProgressIndicator(
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier
                                     .size(24.dp)
-                                    .align(Alignment.CenterStart)
-                                    .offset(x = 8.dp),
+                                    .offset(x = (-12).dp),
                             )
                         }
-                        OutlinedButton(
-                            onClick = { onAction(LoginAction.OnQuickConnectClick) },
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(text = if (state.quickConnectCode != null) state.quickConnectCode!! else stringResource(SetupR.string.login_btn_quick_connect))
-                        }
+                        Text(
+                            text = if (state.quickConnectCode != null) state.quickConnectCode!! else stringResource(
+                                SetupR.string.login_btn_quick_connect
+                            ),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Medium,
+                        )
                     }
                 }
             }
             if (state.disclaimer != null) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(MaterialTheme.spacings.default))
                 Text(text = state.disclaimer!!)
             }
         }
-        IconButton(
-            onClick = { onAction(LoginAction.OnBackClick) },
-            modifier = Modifier.padding(start = 8.dp),
-        ) {
-            Icon(painter = painterResource(CoreR.drawable.ic_arrow_left), contentDescription = null)
-        }
-        IconButton(
-            onClick = { onAction(LoginAction.OnChangeServerClick) },
+        HeaderButton(
+            painter = painterResource(CoreR.drawable.ic_arrow_left),
+            onAction = { onAction(LoginAction.OnBackClick) })
+        HeaderButton(
+            painter = painterResource(CoreR.drawable.ic_server),
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(end = 8.dp),
-        ) {
-            Icon(painter = painterResource(CoreR.drawable.ic_server), contentDescription = null)
-        }
+                .align(Alignment.TopEnd),
+            onAction = { onAction(LoginAction.OnChangeServerClick) },
+        )
     }
 }
 

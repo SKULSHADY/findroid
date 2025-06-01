@@ -1,13 +1,15 @@
 package dev.jdtech.jellyfin.presentation.setup.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,27 +27,34 @@ import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
 import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.core.R as CoreR
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun UserItem(name: String, modifier: Modifier = Modifier, onClick: () -> Unit = {}, onLongClick: () -> Unit = {}) {
+fun UserItem(
+    name: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {}
+) {
     val haptics = LocalHapticFeedback.current
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.medium),
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clip(CardDefaults.outlinedShape)
+            .background(MaterialTheme.colorScheme.surfaceContainer, MaterialTheme.shapes.extraLarge)
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                     onLongClick()
                 },
-            ),
+            )
+            .padding(MaterialTheme.spacings.medium),
     ) {
         Surface(
             color = MaterialTheme.colorScheme.surfaceTint,
-            shape = MaterialTheme.shapes.small,
+            shape = CircleShape,
             modifier = Modifier
                 .size(48.dp),
         ) {
@@ -59,7 +68,7 @@ fun UserItem(name: String, modifier: Modifier = Modifier, onClick: () -> Unit = 
         }
         Text(
             text = name,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }

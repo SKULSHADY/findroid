@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string name="add_server">Add server</string>
+   <string name="add_server">Add Server</string>
    <string name="add_server_btn_connect">Connect</string>
    <string name="add_server_error_empty_address">Empty server address</string>
    <string name="add_server_error_no_id">Server has no id, something seems to be wrong with the server</string>
@@ -18,8 +18,8 @@
    <string name="login_error_wrong_username_password">Wrong username or password</string>
    <string name="servers">Servers</string>
    <string name="servers_no_servers">No servers found</string>
-   <string name="servers_btn_add_server">Add server</string>
-   <string name="remove_server_dialog">Remove server</string>
+   <string name="servers_btn_add_server">Add Server</string>
+   <string name="remove_server_dialog">Remove Server</string>
    <string name="remove_server_dialog_text">Are you sure you want to remove the server %s?</string>
    <string name="welcome">Welcome to Findroid</string>
    <string name="welcome_btn_continue">Continue</string>
@@ -31,7 +31,7 @@
    <string name="server_subtitle">Server: %s</string>
    <string name="users">Users</string>
    <string name="users_no_users">No users found</string>
-   <string name="users_btn_add_user">Add user</string>
-   <string name="remove_user_dialog">Remove user</string>
+   <string name="users_btn_add_user">Add User</string>
+   <string name="remove_user_dialog">Remove User</string>
    <string name="remove_user_dialog_text">Are you sure you want to remove the user %s?</string>
 </resources>

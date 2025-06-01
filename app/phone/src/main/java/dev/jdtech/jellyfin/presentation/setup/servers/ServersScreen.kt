@@ -1,6 +1,7 @@
 package dev.jdtech.jellyfin.presentation.setup.servers
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,10 +39,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.jdtech.jellyfin.models.Server
 import dev.jdtech.jellyfin.models.ServerAddress
 import dev.jdtech.jellyfin.models.ServerWithAddresses
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderButton
+import dev.jdtech.jellyfin.presentation.setup.components.HeaderText
 import dev.jdtech.jellyfin.presentation.setup.components.RootLayout
 import dev.jdtech.jellyfin.presentation.setup.components.ServerBottomSheet
 import dev.jdtech.jellyfin.presentation.setup.components.ServerItem
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
+import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.setup.presentation.servers.ServersAction
 import dev.jdtech.jellyfin.setup.presentation.servers.ServersEvent
 import dev.jdtech.jellyfin.setup.presentation.servers.ServersState
@@ -104,7 +108,7 @@ private fun ServersScreenLayout(
     RootLayout {
         Column(
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = MaterialTheme.spacings.default)
                 .widthIn(max = 480.dp)
                 .fillMaxWidth()
                 .align(Alignment.Center),
@@ -117,18 +121,18 @@ private fun ServersScreenLayout(
                     .width(250.dp)
                     .align(Alignment.CenterHorizontally),
             )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(text = stringResource(SetupR.string.servers), style = MaterialTheme.typography.headlineMedium)
-            Spacer(modifier = Modifier.height(32.dp))
             if (state.servers.isEmpty()) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacings.extraLarge))
                 Text(
                     text = stringResource(SetupR.string.servers_no_servers),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Spacer(modifier = Modifier.weight(1f))
             } else {
+                HeaderText(text = stringResource(SetupR.string.servers))
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.small),
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -153,12 +157,10 @@ private fun ServersScreenLayout(
             }
         }
         if (showBack) {
-            IconButton(
-                onClick = { onAction(ServersAction.OnBackClick) },
-                modifier = Modifier.padding(start = 8.dp),
-            ) {
-                Icon(painter = painterResource(CoreR.drawable.ic_arrow_left), contentDescription = null)
-            }
+            HeaderButton(
+                painter = painterResource(CoreR.drawable.ic_arrow_left),
+                onAction = { onAction(ServersAction.OnBackClick) }
+            )
         }
         ExtendedFloatingActionButton(
             onClick = { onAction(ServersAction.OnAddClick) },
@@ -176,7 +178,12 @@ private fun ServersScreenLayout(
                 Text(text = stringResource(SetupR.string.remove_server_dialog))
             },
             text = {
-                Text(text = stringResource(SetupR.string.remove_server_dialog_text, selectedServer!!.name))
+                Text(
+                    text = stringResource(
+                        SetupR.string.remove_server_dialog_text,
+                        selectedServer!!.name
+                    )
+                )
             },
             onDismissRequest = {
                 openDeleteDialog = false
