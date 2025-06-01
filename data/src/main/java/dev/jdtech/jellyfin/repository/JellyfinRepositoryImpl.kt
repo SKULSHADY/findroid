@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import dev.jdtech.jellyfin.api.JellyfinApi
 import dev.jdtech.jellyfin.database.ServerDatabaseDao
+import dev.jdtech.jellyfin.deviceprofile.ProfileBuilder
 import dev.jdtech.jellyfin.models.FindroidCollection
 import dev.jdtech.jellyfin.models.FindroidEpisode
 import dev.jdtech.jellyfin.models.FindroidItem
@@ -293,18 +294,8 @@ class JellyfinRepositoryImpl(
                     itemId,
                     PlaybackInfoDto(
                         userId = jellyfinApi.userId!!,
-                        deviceProfile = DeviceProfile(
-                            name = "Direct play all",
-                            maxStaticBitrate = 1_000_000_000,
-                            maxStreamingBitrate = 1_000_000_000,
-                            codecProfiles = emptyList(),
-                            containerProfiles = emptyList(),
-                            directPlayProfiles = emptyList(),
-                            transcodingProfiles = emptyList(),
-                            subtitleProfiles = listOf(
-                                SubtitleProfile("srt", SubtitleDeliveryMethod.EXTERNAL),
-                                SubtitleProfile("ass", SubtitleDeliveryMethod.EXTERNAL),
-                            ),
+                        deviceProfile = ProfileBuilder.getDeviceProfile(
+                            profileBuilder = ProfileBuilder()
                         ),
                         maxStreamingBitrate = 1_000_000_000,
                     ),

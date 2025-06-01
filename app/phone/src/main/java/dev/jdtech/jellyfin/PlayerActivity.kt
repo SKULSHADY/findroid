@@ -35,6 +35,7 @@ import androidx.media3.ui.DefaultTimeBar
 import androidx.media3.ui.PlayerControlView
 import androidx.media3.ui.PlayerView
 import androidx.navigation.navArgs
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import dev.jdtech.jellyfin.databinding.ActivityPlayerBinding
 import dev.jdtech.jellyfin.dialogs.SpeedSelectionDialogFragment
@@ -78,10 +79,18 @@ class PlayerActivity : BasePlayerActivity() {
         // Check if PiP is enabled for the app
         val appOps = getSystemService(APP_OPS_SERVICE) as AppOpsManager?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            appOps?.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_PICTURE_IN_PICTURE, Process.myUid(), packageName) == AppOpsManager.MODE_ALLOWED
+            appOps?.unsafeCheckOpNoThrow(
+                AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                Process.myUid(),
+                packageName
+            ) == AppOpsManager.MODE_ALLOWED
         } else {
             @Suppress("DEPRECATION")
-            appOps?.checkOpNoThrow(AppOpsManager.OPSTR_PICTURE_IN_PICTURE, Process.myUid(), packageName) == AppOpsManager.MODE_ALLOWED
+            appOps?.checkOpNoThrow(
+                AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                Process.myUid(),
+                packageName
+            ) == AppOpsManager.MODE_ALLOWED
         }
     }
 
@@ -135,12 +144,11 @@ class PlayerActivity : BasePlayerActivity() {
         binding.playerView.findViewById<View>(R.id.back_button).setOnClickListener {
             finishPlayback()
         }
-
         val videoNameTextView = binding.playerView.findViewById<TextView>(R.id.video_name)
 
-        val audioButton = binding.playerView.findViewById<ImageButton>(R.id.btn_audio_track)
-        val subtitleButton = binding.playerView.findViewById<ImageButton>(R.id.btn_subtitle)
-        val speedButton = binding.playerView.findViewById<ImageButton>(R.id.btn_speed)
+        val audioButton = binding.playerView.findViewById<MaterialButton>(R.id.btn_audio_track)
+        val subtitleButton = binding.playerView.findViewById<MaterialButton>(R.id.btn_subtitle)
+        val speedButton = binding.playerView.findViewById<MaterialButton>(R.id.btn_speed)
         skipSegmentButton = binding.playerView.findViewById(R.id.btn_skip_segment)
         val pipButton = binding.playerView.findViewById<ImageButton>(R.id.btn_pip)
         val lockButton = binding.playerView.findViewById<ImageButton>(R.id.btn_lockview)
@@ -165,7 +173,8 @@ class PlayerActivity : BasePlayerActivity() {
                                     else -> ""
                                 }
                                 // Buttons visibility
-                                skipSegmentButton.isVisible = segment.type != FindroidSegmentType.UNKNOWN && !isInPictureInPictureMode
+                                skipSegmentButton.isVisible =
+                                    segment.type != FindroidSegmentType.UNKNOWN && !isInPictureInPictureMode
                                 if (skipSegmentButton.isVisible) {
                                     handler.removeCallbacks(skipButtonTimeout)
                                     handler.postDelayed(skipButtonTimeout, 5000)
@@ -192,7 +201,8 @@ class PlayerActivity : BasePlayerActivity() {
                             // Chapters
                             if (appPreferences.getValue(appPreferences.playerChapterMarkers) && currentChapters != null) {
                                 currentChapters?.let { chapters ->
-                                    val playerControlView = findViewById<PlayerControlView>(R.id.exo_controller)
+                                    val playerControlView =
+                                        findViewById<PlayerControlView>(R.id.exo_controller)
                                     val numOfChapters = chapters.size
                                     playerControlView.setExtraAdGroupMarkers(
                                         LongArray(numOfChapters) { index -> chapters[index].startPosition },
@@ -204,15 +214,15 @@ class PlayerActivity : BasePlayerActivity() {
                             // File Loaded
                             if (fileLoaded) {
                                 audioButton.isEnabled = true
-                                audioButton.imageAlpha = 255
+                                audioButton.alpha = 1f
                                 lockButton.isEnabled = true
-                                lockButton.imageAlpha = 255
+                                lockButton.alpha = 1f
                                 subtitleButton.isEnabled = true
-                                subtitleButton.imageAlpha = 255
+                                subtitleButton.alpha = 1f
                                 speedButton.isEnabled = true
-                                speedButton.imageAlpha = 255
+                                speedButton.alpha = 1f
                                 pipButton.isEnabled = true
-                                pipButton.imageAlpha = 255
+                                pipButton.alpha = 1f
                             }
                         }
                     }
@@ -226,7 +236,8 @@ class PlayerActivity : BasePlayerActivity() {
                                 if (appPreferences.getValue(appPreferences.playerPipGesture)) {
                                     try {
                                         setPictureInPictureParams(pipParams(event.isPlaying))
-                                    } catch (_: IllegalArgumentException) { }
+                                    } catch (_: IllegalArgumentException) {
+                                    }
                                 }
                             }
                         }
@@ -236,20 +247,20 @@ class PlayerActivity : BasePlayerActivity() {
         }
 
         audioButton.isEnabled = false
-        audioButton.imageAlpha = 75
+        audioButton.alpha = 0.3f
 
         lockButton.isEnabled = false
-        lockButton.imageAlpha = 75
+        lockButton.alpha = 0.3f
 
         subtitleButton.isEnabled = false
-        subtitleButton.imageAlpha = 75
+        subtitleButton.alpha = 0.3f
 
         speedButton.isEnabled = false
-        speedButton.imageAlpha = 75
+        speedButton.alpha = 0.3f
 
         if (isPipSupported) {
             pipButton.isEnabled = false
-            pipButton.imageAlpha = 75
+            pipButton.alpha = 0.3f
         } else {
             val pipSpace = binding.playerView.findViewById<Space>(R.id.space_pip)
             pipButton.isVisible = false
@@ -364,7 +375,8 @@ class PlayerActivity : BasePlayerActivity() {
         }
 
         val sourceRectHint = if (displayAspectRatio < aspectRatio!!) {
-            val space = ((binding.playerView.height - (binding.playerView.width.toFloat() / aspectRatio.toFloat())) / 2).toInt()
+            val space =
+                ((binding.playerView.height - (binding.playerView.width.toFloat() / aspectRatio.toFloat())) / 2).toInt()
             Rect(
                 0,
                 space,
@@ -372,7 +384,8 @@ class PlayerActivity : BasePlayerActivity() {
                 (binding.playerView.width.toFloat() / aspectRatio.toFloat()).toInt() + space,
             )
         } else {
-            val space = ((binding.playerView.width - (binding.playerView.height.toFloat() * aspectRatio.toFloat())) / 2).toInt()
+            val space =
+                ((binding.playerView.width - (binding.playerView.height.toFloat() * aspectRatio.toFloat())) / 2).toInt()
             Rect(
                 space,
                 0,
@@ -399,7 +412,8 @@ class PlayerActivity : BasePlayerActivity() {
 
         try {
             enterPictureInPictureMode(pipParams())
-        } catch (_: IllegalArgumentException) { }
+        } catch (_: IllegalArgumentException) {
+        }
     }
 
     override fun onPictureInPictureModeChanged(
@@ -420,20 +434,22 @@ class PlayerActivity : BasePlayerActivity() {
                     screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
                 }
             }
+
             false -> {
                 binding.playerView.useController = true
                 playerGestureHelper?.updateZoomMode(wasZoom)
 
                 // Override auto brightness
                 window.attributes = window.attributes.apply {
-                    screenBrightness = if (appPreferences.getValue(appPreferences.playerGesturesBrightnessRemember)) {
-                        appPreferences.getValue(appPreferences.playerBrightness)
-                    } else {
-                        Settings.System.getInt(
-                            contentResolver,
-                            Settings.System.SCREEN_BRIGHTNESS,
-                        ).toFloat() / 255
-                    }
+                    screenBrightness =
+                        if (appPreferences.getValue(appPreferences.playerGesturesBrightnessRemember)) {
+                            appPreferences.getValue(appPreferences.playerBrightness)
+                        } else {
+                            Settings.System.getInt(
+                                contentResolver,
+                                Settings.System.SCREEN_BRIGHTNESS,
+                            ).toFloat() / 255
+                        }
                 }
             }
         }

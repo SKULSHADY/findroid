@@ -19,11 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="64dp"
-        android:padding="10dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/overlay_background"
         android:clickable="false"
         android:gravity="center"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="20dp"
         android:orientation="vertical"
         android:visibility="gone"
         tools:visibility="visible">
@@ -33,6 +34,7 @@
             android:layout_width="272dp"
             android:layout_height="153dp"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="10dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/player_trickplay"
@@ -44,10 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@android:color/white"
-            tools:text="+00:00:10 [00:00:20]" />
-
+            tools:text="+ 00:10" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,6 +70,7 @@
             android:layout_height="24dp"
             android:layout_marginVertical="16dp"
             android:gravity="center"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@android:color/white"
             tools:text="58%" />
 
@@ -108,6 +110,7 @@
             android:layout_height="24dp"
             android:layout_marginVertical="16dp"
             android:gravity="center"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@android:color/white"
             tools:text="58%" />
 
@@ -131,9 +134,9 @@
     <LinearLayout
         android:id="@+id/gesture_speed_layout"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         android:background="@drawable/overlay_background"
         android:clickable="false"
         android:gravity="center_vertical"
@@ -145,24 +148,28 @@
             android:id="@+id/gesture_speed_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@android:color/white" />
 
         <ImageView
             android:id="@+id/gesture_speed_image"
-            android:layout_width="36dp"
+            android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginHorizontal="16dp"
-            android:src="@drawable/ic_speed_forward"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:src="@drawable/ic_fast_forward"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/image_ffwd_animation_ripple"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical|end"
         android:alpha="0"
         android:src="@drawable/transparent_circle"
@@ -170,8 +177,8 @@
 
     <ImageView
         android:id="@+id/image_rewind_animation_ripple"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical|start"
         android:alpha="0"
         android:src="@drawable/transparent_circle"
@@ -179,8 +186,8 @@
 
     <ImageView
         android:id="@+id/image_playback_animation_ripple"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center"
         android:alpha="0"
         android:src="@drawable/transparent_circle"

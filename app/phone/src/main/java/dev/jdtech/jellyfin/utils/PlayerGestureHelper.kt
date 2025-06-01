@@ -274,7 +274,7 @@ class PlayerGestureHelper(
                         val newPos = (currentPos + difference).coerceIn(0, vidDuration)
 
                         activity.binding.progressScrubberLayout.visibility = View.VISIBLE
-                        activity.binding.progressScrubberText.text = "${longToTimestamp(difference)} [${longToTimestamp(newPos, true)}]"
+                        activity.binding.progressScrubberText.text = longToTimestamp(difference)
                         swipeGestureValueTrackerProgress = newPos
 
                         if (appPreferences.getValue(appPreferences.playerGesturesSeekTrickplay)) {
@@ -467,7 +467,7 @@ class PlayerGestureHelper(
         val sign = if (noSign) "" else if (duration < 0) "-" else "+"
         val seconds = abs(duration).div(1000)
 
-        return String.format("%s%02d:%02d:%02d", sign, seconds / 3600, (seconds / 60) % 60, seconds % 60)
+        return String.format("%s %02d:%02d", sign, (seconds / 60) % 60, seconds % 60)
     }
 
     /**
