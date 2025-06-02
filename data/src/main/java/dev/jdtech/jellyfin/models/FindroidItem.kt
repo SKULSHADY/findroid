@@ -21,6 +21,7 @@ interface FindroidItem {
     val unplayedItemCount: Int?
     val images: FindroidImages
     val chapters: List<FindroidChapter>?
+    val communityRating: Float? get() = null
 }
 
 suspend fun BaseItemDto.toFindroidItem(

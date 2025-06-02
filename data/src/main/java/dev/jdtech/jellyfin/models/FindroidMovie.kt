@@ -22,7 +22,7 @@ data class FindroidMovie(
     val premiereDate: LocalDateTime?,
     val people: List<FindroidPerson>,
     val genres: List<String>,
-    val communityRating: Float?,
+    override val communityRating: Float?,
     val officialRating: String?,
     val status: String,
     val productionYear: Int?,

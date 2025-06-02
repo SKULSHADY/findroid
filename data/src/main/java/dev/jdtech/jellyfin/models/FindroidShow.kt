@@ -23,7 +23,7 @@ data class FindroidShow(
     val genres: List<String>,
     val people: List<FindroidPerson>,
     override val runtimeTicks: Long,
-    val communityRating: Float?,
+    override val communityRating: Float?,
     val officialRating: String?,
     val status: String,
     val productionYear: Int?,

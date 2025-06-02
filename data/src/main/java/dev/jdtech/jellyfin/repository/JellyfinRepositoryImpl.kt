@@ -206,9 +206,15 @@ class JellyfinRepositoryImpl(
         val items = withContext(Dispatchers.IO) {
             jellyfinApi.suggestionsApi.getSuggestions(
                 jellyfinApi.userId!!,
-                limit = 6,
+                limit = 24,
                 type = listOf(BaseItemKind.MOVIE, BaseItemKind.SERIES),
-            ).content.items
+            ).content.items.filter {
+                when (it.type) {
+                    BaseItemKind.MOVIE -> !it.toFindroidMovie(this@JellyfinRepositoryImpl).played
+                    BaseItemKind.SERIES -> !it.toFindroidShow(this@JellyfinRepositoryImpl).played
+                    else -> false
+                }
+            }.take(6)
         }
         return items.mapNotNull {
             it.toFindroidItem(this, database)

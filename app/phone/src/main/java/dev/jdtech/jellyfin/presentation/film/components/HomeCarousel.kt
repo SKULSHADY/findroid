@@ -2,6 +2,7 @@ package dev.jdtech.jellyfin.presentation.film.components
 
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -9,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,8 @@ fun HomeCarousel(
     items: List<FindroidItem>,
     itemsPadding: PaddingValues,
     onAction: (HomeAction) -> Unit,
+    isLoadingPlayer: Boolean = false,
+    isLoadingRestartPlayer: Boolean = false,
 ) {
     val pagerState = rememberPagerState(pageCount = { items.size })
     val pagerIsDragged by pagerState.interactionSource.collectIsDraggedAsState()
@@ -65,10 +69,15 @@ fun HomeCarousel(
         state = pagerState,
         contentPadding = itemsPadding,
         pageSize = dynamicPageSize,
-        pageSpacing = MaterialTheme.spacings.medium,
+        pageSpacing = MaterialTheme.spacings.extraLarge,
     ) { page ->
         val item = items[page]
-        HomeCarouselItem(item = item, onAction = onAction)
+        HomeCarouselItem(
+            item = item,
+            onAction = onAction,
+            isLoadingPlayer = isLoadingPlayer,
+            isLoadingRestartPlayer = isLoadingRestartPlayer
+        )
     }
 }
 
@@ -80,6 +89,8 @@ private fun HomeCarouselPreview() {
             items = dummyMovies,
             itemsPadding = PaddingValues(horizontal = 0.dp),
             onAction = {},
+            isLoadingPlayer = false,
+            isLoadingRestartPlayer = false
         )
     }
 }
