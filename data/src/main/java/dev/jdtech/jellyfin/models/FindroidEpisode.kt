@@ -23,7 +23,7 @@ data class FindroidEpisode(
     override val canDownload: Boolean,
     override val runtimeTicks: Long,
     override val playbackPositionTicks: Long,
-    val premiereDate: DateTime?,
+    override val premiereDate: DateTime?,
     val seriesName: String,
     val seriesId: UUID,
     val seasonId: UUID,

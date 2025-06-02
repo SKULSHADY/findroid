@@ -17,6 +17,7 @@ val dummyShow = FindroidShow(
     canDownload = false,
     runtimeTicks = 0L,
     communityRating = 8.8f,
+    criticRating = 8.8f,
     endDate = LocalDateTime.parse("2023-11-04T00:00:00"),
     genres = listOf("Action", "Sience Fiction", "Adventure"),
     images = FindroidImages(),

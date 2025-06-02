@@ -2,8 +2,10 @@ package dev.jdtech.jellyfin.models
 
 import dev.jdtech.jellyfin.database.ServerDatabaseDao
 import dev.jdtech.jellyfin.repository.JellyfinRepository
+import org.jellyfin.sdk.model.DateTime
 import org.jellyfin.sdk.model.api.BaseItemDto
 import org.jellyfin.sdk.model.api.BaseItemKind
+import java.time.LocalDateTime
 import java.util.UUID
 
 interface FindroidItem {
@@ -22,7 +24,12 @@ interface FindroidItem {
     val images: FindroidImages
     val chapters: List<FindroidChapter>?
     val productionYear: Int? get() = null
+    val status: String? get() = null
+    val endDate: DateTime? get() = null
     val communityRating: Float? get() = null
+    val criticRating: Float? get() = null
+    val officialRating: String? get() = null
+    val premiereDate: DateTime? get() = null
     val type: CollectionType get() = CollectionType.Unknown
 }
 

@@ -49,6 +49,7 @@ val dummyMovie = FindroidMovie(
     people = emptyList(),
     genres = listOf("Action", "Sience Fiction", "Adventure"),
     communityRating = 7.2f,
+    criticRating = 7.2f,
     officialRating = "PG-13",
     status = "Ended",
     productionYear = 2019,

@@ -2,6 +2,7 @@ package dev.jdtech.jellyfin.presentation.setup.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
 import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.core.R as CoreR
@@ -23,7 +25,8 @@ fun HeaderButton(painter: Painter, modifier: Modifier = Modifier, onAction: () -
             .background(
                 MaterialTheme.colorScheme.surfaceContainer,
                 MaterialTheme.shapes.extraLarge
-            ),
+            )
+            .size(48.dp),
     ) {
         Icon(
             painter = painter,

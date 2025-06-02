@@ -68,5 +68,5 @@ fun ByteArray.toBase64Str(): String {
 fun DateTime.format(): String {
     val instant = this.toInstant(ZoneOffset.UTC)
     val date = Date.from(instant)
-    return DateFormat.getDateInstance(DateFormat.SHORT).format(date)
+    return DateFormat.getDateInstance(DateFormat.MEDIUM).format(date)
 }

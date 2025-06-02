@@ -33,9 +33,10 @@ constructor(
         viewModelScope.launch {
             try {
                 val episode = repository.getEpisode(episodeId)
+                val season = repository.getSeason(episode.seasonId)
                 val videoMetadata = videoMetadataParser.parse(episode.sources.first())
                 val actors = getActors(episode)
-                _state.emit(_state.value.copy(episode = episode, videoMetadata = videoMetadata, actors = actors))
+                _state.emit(_state.value.copy(season = season, episode = episode, videoMetadata = videoMetadata, actors = actors))
             } catch (e: Exception) {
                 _state.emit(_state.value.copy(error = e))
             }

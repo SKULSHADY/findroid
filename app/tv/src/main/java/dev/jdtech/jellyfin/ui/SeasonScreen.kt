@@ -30,7 +30,7 @@ import dev.jdtech.jellyfin.ui.components.EpisodeCard
 import dev.jdtech.jellyfin.utils.ObserveAsEvents
 import dev.jdtech.jellyfin.viewmodels.PlayerItemsEvent
 import dev.jdtech.jellyfin.viewmodels.PlayerViewModel
-import dev.jdtech.jellyfin.viewmodels.SeasonViewModel
+import dev.jdtech.jellyfin.film.presentation.season.SeasonViewModel
 import java.util.UUID
 
 @Composable

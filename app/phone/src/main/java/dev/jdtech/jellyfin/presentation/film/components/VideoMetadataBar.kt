@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.jdtech.jellyfin.models.AudioChannel
 import dev.jdtech.jellyfin.models.AudioCodec
 import dev.jdtech.jellyfin.models.DisplayProfile
@@ -27,18 +29,19 @@ import dev.jdtech.jellyfin.core.R as CoreR
 @Composable
 fun VideoMetadataBar(videoMetadata: VideoMetadata) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.small),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.small, Alignment.CenterHorizontally),
+        modifier = Modifier.fillMaxWidth()
     ) {
         videoMetadata.resolution.firstOrNull()?.apply {
             VideoMetadataBarItem(
                 text = this.raw,
             )
         }
-        videoMetadata.videoCodecs.firstOrNull()?.apply {
-            VideoMetadataBarItem(
-                text = this.raw,
-            )
-        }
+//        videoMetadata.videoCodecs.firstOrNull()?.apply {
+//            VideoMetadataBarItem(
+//                text = this.raw,
+//            )
+//        }
         videoMetadata.displayProfiles.firstOrNull()?.apply {
             val icon = when (this) {
                 DisplayProfile.DOLBY_VISION -> CoreR.drawable.ic_dolby
@@ -74,13 +77,13 @@ fun VideoMetadataBarItem(
 ) {
     Row(
         modifier = Modifier
-            .clip(MaterialTheme.shapes.small)
+            .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .padding(
-                horizontal = MaterialTheme.spacings.small,
+                horizontal = 12.dp,
                 vertical = MaterialTheme.spacings.extraSmall,
             ),
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.extraSmall),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.small),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (icon != null) {
@@ -91,7 +94,7 @@ fun VideoMetadataBarItem(
         }
         Text(
             text = text,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.titleSmall,
         )
     }
 }

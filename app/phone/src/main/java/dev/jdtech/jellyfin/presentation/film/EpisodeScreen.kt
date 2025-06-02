@@ -3,26 +3,17 @@ package dev.jdtech.jellyfin.presentation.film
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,16 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.core.graphics.toColorInt
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.jdtech.jellyfin.PlayerActivity
@@ -51,14 +37,17 @@ import dev.jdtech.jellyfin.core.presentation.dummy.dummyVideoMetadata
 import dev.jdtech.jellyfin.film.presentation.episode.EpisodeAction
 import dev.jdtech.jellyfin.film.presentation.episode.EpisodeState
 import dev.jdtech.jellyfin.film.presentation.episode.EpisodeViewModel
+import dev.jdtech.jellyfin.models.FindroidItem
 import dev.jdtech.jellyfin.presentation.film.components.ActorsRow
+import dev.jdtech.jellyfin.presentation.film.components.InfoBar
 import dev.jdtech.jellyfin.presentation.film.components.ItemButtonsBar
 import dev.jdtech.jellyfin.presentation.film.components.ItemHeader
+import dev.jdtech.jellyfin.presentation.film.components.ScreenHeader
 import dev.jdtech.jellyfin.presentation.film.components.VideoMetadataBar
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
 import dev.jdtech.jellyfin.presentation.theme.spacings
+import dev.jdtech.jellyfin.presentation.utils.rememberSafePadding
 import dev.jdtech.jellyfin.utils.ObserveAsEvents
-import dev.jdtech.jellyfin.utils.format
 import dev.jdtech.jellyfin.viewmodels.PlayerItemsEvent
 import dev.jdtech.jellyfin.viewmodels.PlayerViewModel
 import java.util.UUID
@@ -70,6 +59,7 @@ fun EpisodeScreen(
     navigateBack: () -> Unit,
     viewModel: EpisodeViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel = hiltViewModel(),
+    navigateToItem: (item: FindroidItem) -> Unit,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -90,10 +80,15 @@ fun EpisodeScreen(
                 intent.putExtra("items", ArrayList(event.items))
                 context.startActivity(intent)
             }
+
             is PlayerItemsEvent.PlayerItemsError -> {
                 isLoadingPlayer = false
                 isLoadingRestartPlayer = false
-                Toast.makeText(context, CoreR.string.error_preparing_player_items, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    CoreR.string.error_preparing_player_items,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -110,14 +105,19 @@ fun EpisodeScreen(
                         false -> isLoadingPlayer = true
                     }
                     state.episode?.let { episode ->
-                        playerViewModel.loadPlayerItems(episode, startFromBeginning = action.startFromBeginning)
+                        playerViewModel.loadPlayerItems(
+                            episode,
+                            startFromBeginning = action.startFromBeginning
+                        )
                     }
                 }
+
                 is EpisodeAction.OnBackClick -> navigateBack()
                 else -> Unit
             }
             viewModel.onAction(action)
         },
+        navigateToItem = navigateToItem
     )
 }
 
@@ -127,17 +127,13 @@ private fun EpisodeScreenLayout(
     isLoadingPlayer: Boolean,
     isLoadingRestartPlayer: Boolean,
     onAction: (EpisodeAction) -> Unit,
+    navigateToItem: (item: FindroidItem) -> Unit,
 ) {
-    val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
+    val safePadding = rememberSafePadding()
 
-    val safePaddingStart = with(density) { WindowInsets.safeDrawing.getLeft(this, layoutDirection).toDp() }
-    val safePaddingEnd = with(density) { WindowInsets.safeDrawing.getRight(this, layoutDirection).toDp() }
-    val safePaddingBottom = with(density) { WindowInsets.safeDrawing.getBottom(this).toDp() }
-
-    val paddingStart = safePaddingStart + MaterialTheme.spacings.default
-    val paddingEnd = safePaddingEnd + MaterialTheme.spacings.default
-    val paddingBottom = safePaddingBottom + MaterialTheme.spacings.default
+    val paddingStart = safePadding.start + MaterialTheme.spacings.default
+    val paddingEnd = safePadding.end + MaterialTheme.spacings.default
+    val paddingBottom = safePadding.bottom + MaterialTheme.spacings.large
 
     val scrollState = rememberScrollState()
 
@@ -155,33 +151,7 @@ private fun EpisodeScreenLayout(
                 ItemHeader(
                     item = episode,
                     scrollState = scrollState,
-                    content = {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .padding(
-                                    start = paddingStart,
-                                    end = paddingEnd,
-                                ),
-                        ) {
-                            Text(
-                                text = stringResource(
-                                    id = CoreR.string.season_episode,
-                                    episode.parentIndexNumber,
-                                    episode.indexNumber,
-                                ),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = MaterialTheme.typography.labelLarge,
-                            )
-                            Text(
-                                text = episode.name,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 3,
-                                style = MaterialTheme.typography.headlineMedium,
-                            )
-                        }
-                    },
+                    navigateToItem = { state.season?.let { season -> navigateToItem(season) } },
                 )
                 Column(
                     modifier = Modifier.padding(
@@ -189,43 +159,23 @@ private fun EpisodeScreenLayout(
                         end = paddingEnd,
                     ),
                 ) {
-                    Spacer(Modifier.height(MaterialTheme.spacings.small))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.small),
-                        verticalAlignment = Alignment.Bottom,
-                    ) {
-                        episode.premiereDate?.let { premiereDate ->
-                            Text(
-                                text = premiereDate.format(),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                        Text(
-                            text = stringResource(CoreR.string.runtime_minutes, episode.runtimeTicks.div(600000000)),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        episode.communityRating?.let { communityRating ->
-                            Row(
-                                verticalAlignment = Alignment.Bottom,
-                            ) {
-                                Icon(
-                                    painter = painterResource(CoreR.drawable.ic_star),
-                                    contentDescription = null,
-                                    tint = Color("#F2C94C".toColorInt()),
-                                )
-                                Spacer(Modifier.width(MaterialTheme.spacings.extraSmall))
-                                Text(
-                                    text = "%.1f".format(communityRating),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(MaterialTheme.spacings.small))
+                    Text(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        text = stringResource(
+                            id = CoreR.string.season_episode,
+                            episode.parentIndexNumber,
+                            episode.indexNumber,
+                            episode.name,
+                        ),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    InfoBar(item = episode)
+                    Spacer(Modifier.height(MaterialTheme.spacings.medium))
                     state.videoMetadata?.let { videoMetadata ->
                         VideoMetadataBar(videoMetadata)
-                        Spacer(Modifier.height(MaterialTheme.spacings.small))
+                        Spacer(Modifier.height(MaterialTheme.spacings.large))
                     }
                     ItemButtonsBar(
                         item = episode,
@@ -250,7 +200,7 @@ private fun EpisodeScreenLayout(
                         isLoadingPlayer = isLoadingPlayer,
                         isLoadingRestartPlayer = isLoadingRestartPlayer,
                     )
-                    Spacer(Modifier.height(MaterialTheme.spacings.small))
+                    Spacer(Modifier.height(MaterialTheme.spacings.large))
                     Text(
                         text = episode.overview,
                         modifier = Modifier
@@ -261,7 +211,7 @@ private fun EpisodeScreenLayout(
                         maxLines = if (expandedOverview) Int.MAX_VALUE else 3,
                         style = MaterialTheme.typography.bodyMedium,
                     )
-                    Spacer(Modifier.height(MaterialTheme.spacings.medium))
+                    Spacer(Modifier.height(MaterialTheme.spacings.large))
                 }
                 if (state.actors.isNotEmpty()) {
                     ActorsRow(
@@ -281,27 +231,9 @@ private fun EpisodeScreenLayout(
             )
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .safeDrawingPadding()
-                .padding(horizontal = MaterialTheme.spacings.small),
-        ) {
-            IconButton(
-                onClick = { onAction(EpisodeAction.OnBackClick) },
-                modifier = Modifier
-                    .alpha(0.7f),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color.Black,
-                    contentColor = Color.White,
-                ),
-            ) {
-                Icon(
-                    painter = painterResource(CoreR.drawable.ic_arrow_left),
-                    contentDescription = null,
-                )
-            }
-        }
+        ScreenHeader(
+            onAction = { onAction(EpisodeAction.OnBackClick) },
+        )
     }
 }
 
@@ -317,6 +249,7 @@ private fun EpisodeScreenLayoutPreview() {
             isLoadingPlayer = false,
             isLoadingRestartPlayer = false,
             onAction = {},
+            navigateToItem = {},
         )
     }
 }

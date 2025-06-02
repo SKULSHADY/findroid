@@ -22,16 +22,7 @@ fun ActorsRow(
     actors: List<FindroidPerson>,
     contentPadding: PaddingValues,
 ) {
-    Column(
-        modifier = Modifier
-            .padding(contentPadding),
-    ) {
-        Text(
-            text = stringResource(CoreR.string.cast_amp_crew),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Spacer(Modifier.height(MaterialTheme.spacings.small))
-    }
+    SectionHeader(text = stringResource(CoreR.string.cast_amp_crew))
     LazyRow(
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.medium),

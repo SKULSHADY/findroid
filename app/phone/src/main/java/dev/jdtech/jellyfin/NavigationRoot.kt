@@ -273,7 +273,13 @@ fun NavigationRoot(
                 composable<HomeRoute> {
                     HomeScreen(
                         onLibraryClick = {
-                            navController.safeNavigate(LibraryRoute(libraryId = it.id.toString(), libraryName = it.name, libraryType = it.type))
+                            navController.safeNavigate(
+                                LibraryRoute(
+                                    libraryId = it.id.toString(),
+                                    libraryName = it.name,
+                                    libraryType = it.type
+                                )
+                            )
                         },
                         onSettingsClick = {
                             navController.safeNavigate(SettingsRoute(indexes = intArrayOf(CoreR.string.title_settings)))
@@ -286,7 +292,13 @@ fun NavigationRoot(
                 composable<MediaRoute> {
                     MediaScreen(
                         onItemClick = {
-                            navController.safeNavigate(LibraryRoute(libraryId = it.id.toString(), libraryName = it.name, libraryType = it.type))
+                            navController.safeNavigate(
+                                LibraryRoute(
+                                    libraryId = it.id.toString(),
+                                    libraryName = it.name,
+                                    libraryType = it.type
+                                )
+                            )
                         },
                         onSettingsClick = {
                             navController.safeNavigate(SettingsRoute(indexes = intArrayOf(CoreR.string.title_settings)))
@@ -335,6 +347,9 @@ fun NavigationRoot(
                         navigateBack = {
                             navController.safePopBackStack()
                         },
+                        navigateToItem = { item ->
+                            navigateToItem(navController = navController, item = item)
+                        },
                     )
                 }
             }
@@ -379,13 +394,20 @@ private fun navigateToItem(navController: NavHostController, item: FindroidItem)
     }
 }
 
-private fun <T : Any> NavHostController.safeNavigate(route: T, navOptions: NavOptions? = null, navigatorExtras: Navigator.Extras? = null) {
+private fun <T : Any> NavHostController.safeNavigate(
+    route: T,
+    navOptions: NavOptions? = null,
+    navigatorExtras: Navigator.Extras? = null
+) {
     if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
         this.navigate(route, navOptions, navigatorExtras)
     }
 }
 
-private fun <T : Any> NavHostController.safeNavigate(route: T, builder: NavOptionsBuilder.() -> Unit) {
+private fun <T : Any> NavHostController.safeNavigate(
+    route: T,
+    builder: NavOptionsBuilder.() -> Unit
+) {
     if (this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED) {
         this.navigate(route, builder)
     }

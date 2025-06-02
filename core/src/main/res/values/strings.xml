@@ -30,7 +30,7 @@
     <string name="episode_name_with_end">%1$d-%2$d. %3$s</string>
     <string name="episode_name_extended">S%1$d:E%2$d - %3$s</string>
     <string name="episode_name_extended_with_end">S%1$d:E%2$d-%3$d - %4$s</string>
-    <string name="season_episode">Season %1$d - Episode %2$d</string>
+    <string name="season_episode">S%1$s:E%2$s - %3$s</string>
     <string name="next_up">Next Up</string>
     <string name="libraries">Libraries</string>
     <string name="series_poster">Series poster</string>
@@ -66,7 +66,7 @@
     <string name="sort_by_options_6">Random</string>
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
-    <string name="runtime_minutes">%1$d mins</string>
+    <string name="runtime_minutes">%1$d%1$d mins</string>
     <string name="select_video_version_title">Select version</string>
     <string name="track_selection">[%1$s] %2$s (%3$s)</string>
     <string name="addresses">Addresses</string>
@@ -104,4 +104,5 @@
     <string name="remove_from_favorites">Remove from Favorites</string>
     <string name="not_set">Not set</string>
     <string name="resume_runtime_minutes">Resume from %1$d mins</string>
+    <string name="restart_playback">Play from Beginning</string>
 </resources>

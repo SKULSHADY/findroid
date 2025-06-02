@@ -50,6 +50,7 @@ import dev.jdtech.jellyfin.presentation.film.components.FilmSearchBar
 import dev.jdtech.jellyfin.presentation.film.components.HomeCarousel
 import dev.jdtech.jellyfin.presentation.film.components.HomeSection
 import dev.jdtech.jellyfin.presentation.film.components.HomeView
+import dev.jdtech.jellyfin.presentation.film.components.ScreenHeader
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
 import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.presentation.utils.rememberSafePadding
@@ -241,24 +242,7 @@ private fun HomeScreenLayout(
         }
     }
 
-    Scaffold(
-        modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth(),
-        containerColor = Color.Transparent
-    ) {
-        Canvas(
-            modifier = Modifier
-                .height(64.dp)
-                .fillMaxWidth(),
-        ) {
-            drawRect(
-                brush = Brush.verticalGradient(
-                    colors = listOf(backgroundColor, Color.Transparent),
-                ),
-            )
-        }
-    }
+    ScreenHeader()
 }
 
 @PreviewScreenSizes
