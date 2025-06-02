@@ -17,7 +17,7 @@ data class FindroidCollection(
     override val runtimeTicks: Long = 0L,
     override val playbackPositionTicks: Long = 0L,
     override val unplayedItemCount: Int? = null,
-    val type: CollectionType,
+    override val type: CollectionType,
     override val images: FindroidImages,
     override val chapters: List<FindroidChapter>? = null,
 ) : FindroidItem

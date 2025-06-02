@@ -166,7 +166,7 @@ fun NavigationRoot(
                     label = {
                         Text(text = item.title)
                     },
-                    alwaysShowLabel = false,
+                    alwaysShowLabel = true,
                 )
             }
         },

@@ -139,7 +139,7 @@ class JellyfinRepositoryOfflineImpl(
             database.getSeasonsByShowId(seriesId).map { it.toFindroidSeason(database, jellyfinApi.userId!!) }
         }
 
-    override suspend fun getNextUp(seriesId: UUID?): List<FindroidEpisode> {
+    override suspend fun getNextUp(seriesId: UUID?, enableResumable: Boolean): List<FindroidEpisode> {
         return withContext(Dispatchers.IO) {
             val result = mutableListOf<FindroidEpisode>()
             val shows = database.getShowsByServerId(appPreferences.getValue(appPreferences.currentServer)!!).filter {

@@ -11,6 +11,8 @@ data class FindroidImages(
     val logo: Uri? = null,
     val showPrimary: Uri? = null,
     val showLogo: Uri? = null,
+    val showThumb: Uri? = null,
+    val thumb: Uri? = null,
 )
 
 fun BaseItemDto.toFindroidImages(
@@ -47,6 +49,18 @@ fun BaseItemDto.toFindroidImages(
             .appendQueryParameter("tag", tag)
             .build()
     }
+    val showThumb = parentThumbImageTag?.let { tag ->
+        baseUrl.buildUpon()
+            .appendEncodedPath("items/$seriesId/Images/${ImageType.THUMB}")
+            .appendQueryParameter("tag", tag)
+            .build()
+    }
+    val thumb = imageTags?.get(ImageType.THUMB)?.let { tag ->
+        baseUrl.buildUpon()
+            .appendEncodedPath("items/$id/Images/${ImageType.THUMB}")
+            .appendQueryParameter("tag", tag)
+            .build()
+    }
 
     return FindroidImages(
         primary = primary,
@@ -54,5 +68,7 @@ fun BaseItemDto.toFindroidImages(
         logo = logo,
         showPrimary = showPrimary,
         showLogo = showLogo,
+        showThumb = showThumb,
+        thumb = thumb,
     )
 }

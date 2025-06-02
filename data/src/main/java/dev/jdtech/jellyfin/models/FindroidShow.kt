@@ -26,7 +26,7 @@ data class FindroidShow(
     override val communityRating: Float?,
     val officialRating: String?,
     val status: String,
-    val productionYear: Int?,
+    override val productionYear: Int?,
     val endDate: DateTime?,
     val trailer: String?,
     override val images: FindroidImages,

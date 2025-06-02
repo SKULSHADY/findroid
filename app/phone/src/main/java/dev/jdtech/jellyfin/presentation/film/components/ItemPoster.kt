@@ -11,6 +11,8 @@ import coil3.compose.AsyncImage
 import dev.jdtech.jellyfin.models.FindroidEpisode
 import dev.jdtech.jellyfin.models.FindroidItem
 import dev.jdtech.jellyfin.models.FindroidMovie
+import dev.jdtech.jellyfin.models.FindroidSeason
+import dev.jdtech.jellyfin.models.FindroidShow
 
 enum class Direction {
     HORIZONTAL, VERTICAL
@@ -21,16 +23,22 @@ fun ItemPoster(
     item: FindroidItem,
     direction: Direction,
     modifier: Modifier = Modifier,
+    forceThumbnail: Boolean = false,
 ) {
     var imageUri = item.images.primary
 
     when (direction) {
         Direction.HORIZONTAL -> {
-            if (item is FindroidMovie) imageUri = item.images.backdrop
+            when (item) {
+                is FindroidMovie -> imageUri = item.images.thumb
+                is FindroidEpisode -> if (imageUri == null || forceThumbnail) imageUri = item.images.showThumb
+            }
         }
+
         Direction.VERTICAL -> {
             when (item) {
                 is FindroidEpisode -> imageUri = item.images.showPrimary
+                is FindroidSeason -> if (imageUri == null) imageUri = item.images.showPrimary
             }
         }
     }

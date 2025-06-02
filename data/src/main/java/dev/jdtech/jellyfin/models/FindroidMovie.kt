@@ -25,7 +25,7 @@ data class FindroidMovie(
     override val communityRating: Float?,
     val officialRating: String?,
     val status: String,
-    val productionYear: Int?,
+    override val productionYear: Int?,
     val endDate: LocalDateTime?,
     val trailer: String?,
     override val unplayedItemCount: Int? = null,

@@ -96,12 +96,12 @@
     <string name="stop_download">Stop download</string>
     <string name="privacy_policy_notice">By using Findroid you agree with the <a href='https://raw.githubusercontent.com/jarnedemeulemeester/findroid/main/PRIVACY'>Privacy Policy</a> which states that we do not collect any data</string>
     <string name="live_tv">Live TV</string>
-    <string name="play">Play</string>
-    <string name="watch_trailer">Watch trailer</string>
-    <string name="mark_as_played">Mark as played</string>
-    <string name="unmark_as_played">Unmark as played</string>
-    <string name="add_to_favorites">Add to favorites</string>
-    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="play">Watch Now</string>
+    <string name="watch_trailer">Watch Trailer</string>
+    <string name="mark_as_played">Mark as Played</string>
+    <string name="unmark_as_played">Unmark as Played</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
     <string name="not_set">Not set</string>
     <string name="resume_runtime_minutes">Resume from %1$d mins</string>
 </resources>

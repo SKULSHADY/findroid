@@ -35,7 +35,7 @@ import dev.jdtech.jellyfin.presentation.film.components.Direction
 import dev.jdtech.jellyfin.presentation.film.components.ErrorCard
 import dev.jdtech.jellyfin.presentation.film.components.FavoritesCard
 import dev.jdtech.jellyfin.presentation.film.components.FilmSearchBar
-import dev.jdtech.jellyfin.presentation.film.components.ItemCard
+import dev.jdtech.jellyfin.presentation.film.components.LibraryCard
 import dev.jdtech.jellyfin.presentation.theme.FindroidTheme
 import dev.jdtech.jellyfin.presentation.theme.spacings
 import dev.jdtech.jellyfin.presentation.utils.rememberSafePadding
@@ -109,7 +109,7 @@ private fun MediaScreenLayout(
             inputPaddingEnd = safePadding.end,
         )
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = minColumnSize),
+            columns = GridCells.Fixed(1),
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 start = paddingStart,
@@ -118,7 +118,7 @@ private fun MediaScreenLayout(
                 bottom = paddingBottom,
             ),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.default),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.default),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.medium),
         ) {
             item(
                 span = { GridItemSpan(maxLineSpan) },
@@ -128,9 +128,8 @@ private fun MediaScreenLayout(
                 )
             }
             items(state.libraries, key = { it.id }) { library ->
-                ItemCard(
+                LibraryCard(
                     item = library,
-                    direction = Direction.HORIZONTAL,
                     onClick = {
                         onAction(MediaAction.OnItemClick(library))
                     },
