@@ -135,7 +135,7 @@ private fun LibraryScreenLayout(
                     },
                 ) {
                     Icon(
-                        painter = painterResource(CoreR.drawable.ic_arrow_down_up),
+                        painter = painterResource(CoreR.drawable.ic_sort),
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize),
                     )

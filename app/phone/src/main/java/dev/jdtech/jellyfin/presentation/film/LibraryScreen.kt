@@ -34,6 +34,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -112,8 +113,10 @@ private fun LibraryScreenLayout(
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
 
-    val safePaddingStart = with(density) { WindowInsets.safeDrawing.getLeft(this, layoutDirection).toDp() }
-    val safePaddingEnd = with(density) { WindowInsets.safeDrawing.getRight(this, layoutDirection).toDp() }
+    val safePaddingStart =
+        with(density) { WindowInsets.safeDrawing.getLeft(this, layoutDirection).toDp() }
+    val safePaddingEnd =
+        with(density) { WindowInsets.safeDrawing.getRight(this, layoutDirection).toDp() }
     val safePaddingBottom = with(density) { WindowInsets.safeDrawing.getBottom(this).toDp() }
 
     val paddingStart = safePaddingStart + MaterialTheme.spacings.default
@@ -136,13 +139,17 @@ private fun LibraryScreenLayout(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(libraryName)
+                    Text(
+                        libraryName, fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(start = MaterialTheme.spacings.small),
+                    )
                 },
                 navigationIcon = {
                     IconButton(
                         onClick = {
                             onAction(LibraryAction.OnBackClick)
                         },
+                        modifier = Modifier.padding(start = MaterialTheme.spacings.medium),
                     ) {
                         Icon(
                             painter = painterResource(CoreR.drawable.ic_arrow_left),
@@ -155,9 +162,10 @@ private fun LibraryScreenLayout(
                         onClick = {
                             showSortByDialog = true
                         },
+                        modifier = Modifier.padding(end = MaterialTheme.spacings.medium),
                     ) {
                         Icon(
-                            painter = painterResource(CoreR.drawable.ic_arrow_down_up),
+                            painter = painterResource(CoreR.drawable.ic_sort),
                             contentDescription = null,
                         )
                     }
@@ -184,7 +192,7 @@ private fun LibraryScreenLayout(
                     ),
             )
             LazyVerticalGrid(
-                columns = GridCellsAdaptiveWithMinColumns(minSize = 160.dp, minColumns = 2),
+                columns = GridCellsAdaptiveWithMinColumns(minSize = 160.dp, minColumns = 3),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
                     start = paddingStart + innerPadding.calculateStartPadding(layoutDirection),
@@ -192,8 +200,8 @@ private fun LibraryScreenLayout(
                     end = paddingEnd + innerPadding.calculateEndPadding(layoutDirection),
                     bottom = paddingBottom + innerPadding.calculateBottomPadding(),
                 ),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.default),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.default),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacings.large),
             ) {
                 items(
                     count = items.itemCount,
@@ -230,19 +238,26 @@ private fun LibraryScreenLayout(
 }
 
 @Composable
-private fun ErrorGroup(loadStates: CombinedLoadStates, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+private fun ErrorGroup(
+    loadStates: CombinedLoadStates,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var showErrorDialog by rememberSaveable { mutableStateOf(false) }
 
     val loadStateError = when {
         loadStates.refresh is LoadState.Error -> {
             loadStates.refresh as LoadState.Error
         }
+
         loadStates.prepend is LoadState.Error -> {
             loadStates.prepend as LoadState.Error
         }
+
         loadStates.append is LoadState.Error -> {
             loadStates.append as LoadState.Error
         }
+
         else -> null
     }
 
